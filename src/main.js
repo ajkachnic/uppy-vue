@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import App from './App.vue'
-
-Vue.config.productionTip = false
-
-new Vue({
-  render: h => h(App)
-}).$mount('#app')
+export { default as Dashboard } from './components/Dashboard.vue'
+export { default as DashboardModal } from './components/DashboardModal.vue'
+export { default as DragDrop } from './components/DragDrop.vue'
+export { default as ProgressBar } from './components/ProgressBar.vue'
+export { default as StatusBar } from './components/StatusBar.vue'

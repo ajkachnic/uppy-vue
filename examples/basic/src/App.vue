@@ -1,26 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <DashboardModal :uppy="uppy" :open="true"/>
+    <Dashboard :uppy="uppy"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import DashboardModal from './components/uppy/DashboardModal.vue'
+import { Dashboard } from 'uppy-vue'
 
-import * as Uppy from '@uppy/core'
+import Uppy from '@uppy/core'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    DashboardModal
+    Dashboard
   },
   data () {
     return {
-      uppy: (new Uppy())
+      uppy: new Uppy()
     }
   },
   beforeDestroy () {
