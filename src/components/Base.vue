@@ -28,7 +28,7 @@ export default Vue.extend({
     },
     onMount: {
       type: Function,
-      required: true
+      required: false
     }
   },
   methods: {
@@ -38,7 +38,7 @@ export default Vue.extend({
         target: this.$refs.container,
         ...this.uppyProps
       })
-      this.plugin = this.uppy.getPlugin((this.uppyProps.id))
+      this.plugin = this.uppy.getPlugin(this.uppyProps.id)
     },
     uninstall () {
       this.uppy.removePlugin(this.plugin)
@@ -48,7 +48,7 @@ export default Vue.extend({
   // Lifecycle hooks
   mounted () {
     this.create()
-    this.onMount(this)
+    this.onMount && this.onMount(this)
   },
   beforeDestroy () {
     this.uninstall()

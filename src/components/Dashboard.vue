@@ -16,6 +16,10 @@ export default {
     pluginOptions: {
       type: Object,
       default: () => {}
+    },
+    plugins: {
+      type: Array,
+      required: false
     }
   },
   data () {
@@ -31,6 +35,7 @@ export default {
   computed: {
     props () {
       return {
+        plugins: this.plugins || [],
         ...this.defaultOptions,
         ...this.pluginOptions
       }
