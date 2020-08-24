@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <test-dashboard :uppy="uppy"  :props="{ plugins }"/>
+    <Dashboard :uppy="uppy" :plugins="plugins"/>
   </div>
 </template>
 
 <script>
 import '@uppy/dashboard/dist/style.css'
-import TestDashboard from 'uppy-vue/src/components/TestDashboard.js';
+import { Dashboard } from 'uppy-vue'
 
 import Uppy from '@uppy/core'
 import * as Webcam from '@uppy/webcam'
@@ -14,7 +14,7 @@ import * as Webcam from '@uppy/webcam'
 export default {
   name: 'App',
   components: {
-    TestDashboard
+    Dashboard
   },
   computed: {
     uppy: () => new Uppy().use(Webcam)
