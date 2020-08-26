@@ -1,49 +1,52 @@
 <template>
-  <Base :pluginType="pluginType" :uppy="uppy" :uppyProps="props"/>
+  <div ref="container" />
 </template>
-
 <script>
-import Base from './Base.vue'
-import * as Dashboard from '@uppy/dashboard'
-import '@uppy/dashboard/dist/style.css'
+import DashboardPlugin from '@uppy/dashboard'
 
 export default {
-  components: { Base },
+  data () {
+    return {
+      plugin: null
+    }
+  },
   props: {
     uppy: {
       required: true
     },
-    pluginOptions: {
-      type: Object,
-      default: () => {}
-    },
-    plugins: {
-      type: Array,
-      required: false
+    props: {
+      type: Object
     }
   },
-  data () {
-    return {
-      pluginType: Dashboard.default,
-      defaultOptions: {
+  mounted () {
+    this.installPlugin()
+  },
+  methods: {
+    installPlugin () {
+      const uppy = this.uppy
+      const options = {
         id: 'vue:Dashboard',
         inline: true,
-        disabled: false
+        ...this.props,
+        target: this.$refs.container
       }
+      uppy.use(DashboardPlugin, options)
+      this.plugin = uppy.getPlugin(options.id)
+    },
+    uninstallPlugin (uppy = this.uppy) {
+      uppy.removePlugin(this.plugin)
     }
   },
-  computed: {
-    props () {
-      return {
-        plugins: this.plugins || [],
-        ...this.defaultOptions,
-        ...this.pluginOptions
+  beforeDestroy () {
+    this.uninstallPlugin()
+  },
+  watch: {
+    uppy (current, old) {
+      if (old !== current) {
+        this.uninstallPlugin(old)
+        this.installPlugin()
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>

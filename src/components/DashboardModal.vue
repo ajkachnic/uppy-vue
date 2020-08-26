@@ -1,51 +1,68 @@
 <template>
-  <Base :pluginType="pluginType" :uppy="uppy" :uppyProps="props" :onMount="vm => {
-    if(open) {
-      vm.plugin.openModal()
-    }
-  }"/>
+  <div ref="container" />
 </template>
-
 <script>
-import Base from './Base.vue'
-import * as Dashboard from '@uppy/dashboard'
-import '@uppy/dashboard/dist/style.css'
+import DashboardPlugin from '@uppy/dashboard'
 
 export default {
-  components: { Base },
+  data () {
+    return {
+      plugin: null
+    }
+  },
   props: {
     uppy: {
       required: true
     },
-    pluginOptions: {
-      type: Object,
-      default: () => {}
+    props: {
+      type: Object
     },
     open: {
       type: Boolean,
-      default: false
+      required: true
     }
   },
-  data () {
-    return {
-      pluginType: Dashboard.default,
-      defaultOptions: {
+  mounted () {
+    this.installPlugin()
+  },
+  methods: {
+    installPlugin () {
+      const uppy = this.uppy
+      const options = {
         id: 'vue:DashboardModal',
-        target: 'body'
+        ...this.props,
+        target: this.$refs.container
       }
+      uppy.use(DashboardPlugin, options)
+      this.plugin = uppy.getPlugin(options.id)
+      if (this.open) {
+        this.plugin.openModal()
+      }
+    },
+    uninstallPlugin (uppy = this.uppy) {
+      uppy.removePlugin(this.plugin)
     }
   },
-  computed: {
-    props () {
-      return {
-        ...this.defaultOptions,
-        ...this.pluginOptions
+  beforeDestroy () {
+    this.uninstallPlugin()
+  },
+  watch: {
+    uppy (current, old) {
+      if (old !== current) {
+        this.uninstallPlugin(old)
+        this.installPlugin()
+      }
+    },
+    open: {
+      handler (current, old) {
+        if (current && !old) {
+          this.plugin.openModal()
+        }
+        if (!current && old) {
+          this.plugin.closeModal()
+        }
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>

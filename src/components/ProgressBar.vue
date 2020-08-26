@@ -1,42 +1,51 @@
 <template>
-  <Base :pluginType="pluginType" :uppy="uppy" :uppyProps="props"/>
+  <div ref="container" />
 </template>
-
 <script>
-import Base from './Base.vue'
-import ProgressBar from '@uppy/progress-bar'
-import '@uppy/progress-bar/dist/style.css'
+import ProgressBarPlugin from '@uppy/progress-bar'
 
 export default {
-  components: { Base },
+  data () {
+    return {
+      plugin: null
+    }
+  },
   props: {
     uppy: {
       required: true
     },
-    pluginOptions: {
-      type: Object,
-      default: () => {}
+    props: {
+      type: Object
     }
   },
-  data () {
-    return {
-      pluginType: ProgressBar.default,
-      defaultOptions: {
-        id: 'vue:ProgressBar'
+  mounted () {
+    this.installPlugin()
+  },
+  methods: {
+    installPlugin () {
+      const uppy = this.uppy
+      const options = {
+        id: 'vue:ProgressBar',
+        ...this.props,
+        target: this.$refs.container
       }
+      uppy.use(ProgressBarPlugin, options)
+      this.plugin = uppy.getPlugin(options.id)
+    },
+    uninstallPlugin (uppy = this.uppy) {
+      uppy.removePlugin(this.plugin)
     }
   },
-  computed: {
-    props () {
-      return {
-        ...this.defaultOptions,
-        ...this.pluginOptions
+  beforeDestroy () {
+    this.uninstallPlugin()
+  },
+  watch: {
+    uppy (current, old) {
+      if (old !== current) {
+        this.uninstallPlugin(old)
+        this.installPlugin()
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>
