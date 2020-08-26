@@ -1,10 +1,6 @@
-<template>
-  <div ref="container" />
-</template>
-<script>
-import DragDropPlugin from '@uppy/drag-drop'
+const DragDropPlugin = require('@uppy/drag-drop')
 
-export default {
+module.exports = {
   data () {
     return {
       plugin: null
@@ -24,11 +20,11 @@ export default {
   methods: {
     installPlugin () {
       const uppy = this.uppy
-      const options = {
-        id: 'vue:DragDrop',
-        ...this.props,
-        target: this.$refs.container
-      }
+      const options = Object.assign(
+        { id: 'vue:DragDrop' },
+        this.props,
+        { target: this.$refs.container }
+      )
       uppy.use(DragDropPlugin, options)
       this.plugin = uppy.getPlugin(options.id)
     },
@@ -46,6 +42,10 @@ export default {
         this.installPlugin()
       }
     }
+  },
+  render (h) {
+    return h('div', {
+      ref: 'container'
+    })
   }
 }
-</script>

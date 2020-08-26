@@ -1,10 +1,6 @@
-<template>
-  <div ref="container" />
-</template>
-<script>
-import StatusBarPlugin from '@uppy/status-bar'
+const DashboardPlugin = require('@uppy/dashboard')
 
-export default {
+module.exports = {
   data () {
     return {
       plugin: null
@@ -16,6 +12,9 @@ export default {
     },
     props: {
       type: Object
+    },
+    plugins: {
+      type: Array
     }
   },
   mounted () {
@@ -24,12 +23,16 @@ export default {
   methods: {
     installPlugin () {
       const uppy = this.uppy
-      const options = {
-        id: 'vue:StatusBar',
-        ...this.props,
-        target: this.$refs.container
-      }
-      uppy.use(StatusBarPlugin, options)
+      const options = Object.assign(
+        {
+          id: 'vue:Dashboard',
+          inline: true,
+          plugins: this.plugins
+        },
+        this.props,
+        { target: this.$refs.container }
+      )
+      uppy.use(DashboardPlugin, options)
       this.plugin = uppy.getPlugin(options.id)
     },
     uninstallPlugin (uppy = this.uppy) {
@@ -46,6 +49,10 @@ export default {
         this.installPlugin()
       }
     }
+  },
+  render (h) {
+    return h('div', {
+      ref: 'container'
+    })
   }
 }
-</script>

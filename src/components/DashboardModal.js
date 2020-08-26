@@ -1,10 +1,6 @@
-<template>
-  <div ref="container" />
-</template>
-<script>
-import DashboardPlugin from '@uppy/dashboard'
+const DashboardPlugin = require('@uppy/dashboard')
 
-export default {
+module.exports = {
   data () {
     return {
       plugin: null
@@ -19,6 +15,10 @@ export default {
     },
     plugins: {
       type: Array
+    },
+    open: {
+      type: Boolean,
+      required: true
     }
   },
   mounted () {
@@ -27,15 +27,19 @@ export default {
   methods: {
     installPlugin () {
       const uppy = this.uppy
-      const options = {
-        id: 'vue:Dashboard',
-        inline: true,
-        plugins: this.plugins,
-        ...this.props,
-        target: this.$refs.container
+      const options = Object.assign(
+        { id: 'vue:DashboardModal', plugins: this.plugins },
+        this.props
+      )
+
+      if (!options.target) {
+        options.target = this.$refs.container
       }
       uppy.use(DashboardPlugin, options)
       this.plugin = uppy.getPlugin(options.id)
+      if (this.open) {
+        this.plugin.openModal()
+      }
     },
     uninstallPlugin (uppy = this.uppy) {
       uppy.removePlugin(this.plugin)
@@ -50,7 +54,21 @@ export default {
         this.uninstallPlugin(old)
         this.installPlugin()
       }
+    },
+    open: {
+      handler (current, old) {
+        if (current && !old) {
+          this.plugin.openModal()
+        }
+        if (!current && old) {
+          this.plugin.closeModal()
+        }
+      }
     }
+  },
+  render (h) {
+    return h('div', {
+      ref: 'container'
+    })
   }
 }
-</script>

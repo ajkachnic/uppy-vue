@@ -1,10 +1,6 @@
-<template>
-  <div ref="container" />
-</template>
-<script>
-import ProgressBarPlugin from '@uppy/progress-bar'
+const StatusBarPlugin = require('@uppy/status-bar')
 
-export default {
+module.exports = {
   data () {
     return {
       plugin: null
@@ -24,12 +20,12 @@ export default {
   methods: {
     installPlugin () {
       const uppy = this.uppy
-      const options = {
-        id: 'vue:ProgressBar',
+      const options = Object.assign(
+        { id: 'vue:StatusBar' },
         ...this.props,
-        target: this.$refs.container
-      }
-      uppy.use(ProgressBarPlugin, options)
+        { target: this.$refs.container }
+      )
+      uppy.use(StatusBarPlugin, options)
       this.plugin = uppy.getPlugin(options.id)
     },
     uninstallPlugin (uppy = this.uppy) {
@@ -48,4 +44,3 @@ export default {
     }
   }
 }
-</script>
