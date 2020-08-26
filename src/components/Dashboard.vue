@@ -16,6 +16,9 @@ export default {
     },
     props: {
       type: Object
+    },
+    plugins: {
+      type: Array
     }
   },
   mounted () {
@@ -27,6 +30,7 @@ export default {
       const options = {
         id: 'vue:Dashboard',
         inline: true,
+        plugins: this.plugins,
         ...this.props,
         target: this.$refs.container
       }

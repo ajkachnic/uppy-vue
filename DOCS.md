@@ -66,7 +66,7 @@ The following plugins are available as Vue component wrappers:
  - `<ProgressBar />` - renders a `@uppy/progress-bar`
  - `<StatusBar />` - renders a `@uppy/status-bar`
 
-Each component takes a `pluginOptions` prop that will be passed to the UI Plugin. Both `@uppy/dashboard` based plugins also take a `plugins` array as a props, make it easy to add your plugins.
+Each component takes a `props` prop that will be passed to the UI Plugin. Both `@uppy/dashboard` based plugins also take a `plugins` array as a props, make it easy to add your plugins. 
 
 ### Initializing Uppy
 
@@ -90,6 +90,13 @@ export default {
   }
 }
 ```
+
+## Component Differences
+- `<Dashboard />` 
+  - Takes a `plugins` array for what plugins to use
+- `<DashboardModal />`
+  - Takes a `plugins` array for what plugins to use
+  - A `open` boolean to determine whether or not the modal should be open
 
 [Vue]: https://vuejs.org
 [Nuxt]: https://nuxtjs.org

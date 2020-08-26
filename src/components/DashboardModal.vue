@@ -17,6 +17,9 @@ export default {
     props: {
       type: Object
     },
+    plugins: {
+      type: Array
+    },
     open: {
       type: Boolean,
       required: true
@@ -30,6 +33,7 @@ export default {
       const uppy = this.uppy
       const options = {
         id: 'vue:DashboardModal',
+        plugins: this.plugins,
         ...this.props,
         target: this.$refs.container
       }
