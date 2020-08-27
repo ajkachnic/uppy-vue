@@ -1,5 +1,0 @@
-export { default as Dashboard } from './components/Dashboard.vue'
-export { default as DashboardModal } from './components/DashboardModal.vue'
-export { default as DragDrop } from './components/DragDrop.vue'
-export { default as ProgressBar } from './components/ProgressBar.vue'
-export { default as StatusBar } from './components/StatusBar.vue'
